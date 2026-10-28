@@ -88,15 +88,19 @@ uptime-health/
 ---
 
 ### 방법 1: Docker로 단일 컨테이너 실행 (권장)
-복잡한 의존성 설치 없이 Docker 명령어 하나로 백엔드와 프론트엔드가 통합된 단일 컨테이너를 구동할 수 있습니다:
+복잡한 의존성 설치 없이 Docker Hub 이미지 또는 Compose 명령어로 단일 컨테이너를 구동할 수 있습니다:
 
 ```bash
-# Docker Compose로 실행 (가장 간편)
-docker compose up -d
+# Docker Hub에서 공식 이미지 직접 실행
+docker run -d \
+  -p 3001:3001 \
+  -v uptime-data:/app/data \
+  --name uptime-health \
+  --restart unless-stopped \
+  jaewooo/uptime-health:latest
 
-# 또는 Docker CLI 직접 실행
-docker build -t uptime-health .
-docker run -d -p 3001:3001 -v uptime-data:/app/data --name uptime-health --restart unless-stopped uptime-health
+# 또는 Docker Compose로 실행 (로컬 빌드)
+docker compose up -d
 ```
 > 구동 후 브라우저에서 **`http://localhost:3001`** 로 접속하시면 대시보드와 API가 모두 통합 제공됩니다.
 
