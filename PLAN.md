@@ -198,8 +198,12 @@ erDiagram
 - [ ] 테스트 알림 발송 기능
 - [ ] 알림 채널 관리 UI
 
-### Phase 4: 기능 고도화 및 패키징 [예정]
+### Phase 4: 기능 고도화 및 패키징 [진행 중]
+- [x] **단일 컨테이너 Multi-stage Dockerfile 및 docker-compose.yml 제공**:
+  - [x] 프론트엔드 빌드(React/Vite) + 백엔드 빌드(Fastify/TS) 통합
+  - [x] 단일 포트(3001)에서 웹 대시보드 SPA 및 API/WebSocket 통합 서빙
+  - [x] 컨테이너 내 ICMP Ping 지원(`iputils-ping`) 및 볼륨 영속화(`uptime-data`)
+  - [x] Docker 헬스체크(`HEALTHCHECK`) 내장
 - [ ] SSL/TLS 인증서 만료 잔여일 체크 및 사전 알림
 - [ ] 유지보수 모드 (Maintenance Window - 특정 시간대 알림 음소거)
 - [ ] Public Status Page (비로그인 공개 상태 열람 페이지)
-- [ ] 단일 Dockerfile 및 Docker Compose 배포 패키지 구성

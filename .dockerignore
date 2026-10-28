@@ -1,0 +1,13 @@
+node_modules
+.git
+.gitignore
+dist
+server/dist
+client/dist
+server/data/*.db
+server/data/*.db-journal
+server/data/*.db-wal
+server/data/*.db-shm
+*.log
+.vscode
+.idea

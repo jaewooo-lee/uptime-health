@@ -1,6 +1,9 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import websocket from '@fastify/websocket';
+import fastifyStatic from '@fastify/static';
+import path from 'node:path';
+import fs from 'node:fs';
 import { initDatabase } from './db/index.js';
 import { monitorRoutes } from './routes/monitors.js';
 import { SchedulerService } from './services/scheduler.service.js';
@@ -54,6 +57,31 @@ async function start() {
 
     // 기본 헬스 체크
     fastify.get('/health', async () => ({ status: 'ok', time: new Date().toISOString() }));
+
+    // 정적 프론트엔드 파일 서빙 (프로덕션 / Docker 환경)
+    const possibleStaticPaths = [
+      process.env.STATIC_DIR,
+      path.resolve(process.cwd(), 'public'),
+      path.resolve(process.cwd(), '../client/dist'),
+    ].filter(Boolean) as string[];
+
+    const staticPath = possibleStaticPaths.find((p) => fs.existsSync(p));
+
+    if (staticPath) {
+      console.log(`[Static] Serving UI from: ${staticPath}`);
+      await fastify.register(fastifyStatic, {
+        root: staticPath,
+        prefix: '/',
+      });
+
+      fastify.setNotFoundHandler((req, reply) => {
+        if (req.raw.url && (req.raw.url.startsWith('/api') || req.raw.url.startsWith('/ws'))) {
+          reply.code(404).send({ error: 'Route not found' });
+        } else {
+          reply.sendFile('index.html');
+        }
+      });
+    }
 
     initDatabase();
     await SchedulerService.startAll();

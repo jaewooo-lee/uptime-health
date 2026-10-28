@@ -1,0 +1,14 @@
+services:
+  uptime-health:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: uptime-health
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./uptime-data:/app/data
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
